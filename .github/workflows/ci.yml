@@ -1,0 +1,54 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    # 告訴 GitHub：請給我一台最新的 Ubuntu 虛擬機來跑任務
+    runs-on: unbutu-latest
+
+    steps:
+      # 步驟 1：把你的專案程式碼 clone 到這台虛擬機裡
+      - name: Checkout code
+        uses: actions/Checkout@v4
+
+      # 步驟 2：在這台虛擬機上安裝 Python 語言環境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"  # 確保跟本機開發的版本一致
+
+      # 步驟 3：裝環境
+      - name: Install dependencies
+        run: |
+          pip install flask pytest
+
+      # 步驟 4：執行單元測試
+      - name: Run tests
+        run: |
+          pytest test/ -v
+
+  docker-build:
+    runs-on: unbutu-latest
+
+    needs: test   # test 通過才跑這個 job
+
+    steps:
+      - name: Checkout code
+        uses: actions/Checkout@v4
+
+      - name: build Docker image
+        run: |
+          docker build -t fab-report-api .
+
+      - name: Test Docker container
+        run: |
+          docker run -d -p 5000:5000 --name test-container fab-report-api
+          sleep 3
+          curl -f http://localhost:5000/ || exit 1
+          curl -f http://localhost:5000/api/yield || exit 1
+          docker stop test-container
