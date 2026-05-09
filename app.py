@@ -1,11 +1,14 @@
+import random
+import datetime
 from flask import Flask, jsonify
-import random, datetime
 
 app = Flask(__name__)
+
 
 @app.route("/")
 def index():
     return "TSMC IMC 模擬報表系統 - 運行中 ✅"
+
 
 @app.route("/api/yield")
 def yield_rate():
@@ -23,5 +26,6 @@ def yield_rate():
         "hourly_data": data
     })
 
-if  __name__ == "__main__":
-    app.run(host = "0.0.0.0", port = 5000)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
