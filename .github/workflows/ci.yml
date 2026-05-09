@@ -7,27 +7,34 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install flask8
+      - run: flask8 app.py --max-line-length=120
+
   test:
-    # 告訴 GitHub：請給我一台最新的 Ubuntu 虛擬機來跑任務
     runs-on: ubuntu-latest
 
+    needs: lint
+
     steps:
-      # 步驟 1：把你的專案程式碼 clone 到這台虛擬機裡
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 步驟 2：在這台虛擬機上安裝 Python 語言環境
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"  # 確保跟本機開發的版本一致
+          python-version: "3.11"
 
-      # 步驟 3：裝環境
       - name: Install dependencies
         run: |
           pip install flask pytest
 
-      # 步驟 4：執行單元測試
       - name: Run tests
         run: |
           pytest test/ -v
@@ -35,7 +42,7 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
 
-    needs: test   # test 通過才跑這個 job
+    needs: test
 
     steps:
       - name: Checkout code
