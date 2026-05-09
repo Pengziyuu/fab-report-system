@@ -9,12 +9,12 @@ on:
 jobs:
   test:
     # 告訴 GitHub：請給我一台最新的 Ubuntu 虛擬機來跑任務
-    runs-on: unbutu-latest
+    runs-on: ubuntu-latest
 
     steps:
       # 步驟 1：把你的專案程式碼 clone 到這台虛擬機裡
       - name: Checkout code
-        uses: actions/Checkout@v4
+        uses: actions/checkout@v4
 
       # 步驟 2：在這台虛擬機上安裝 Python 語言環境
       - name: Set up Python
@@ -33,13 +33,13 @@ jobs:
           pytest test/ -v
 
   docker-build:
-    runs-on: unbutu-latest
+    runs-on: ubuntu-latest
 
     needs: test   # test 通過才跑這個 job
 
     steps:
       - name: Checkout code
-        uses: actions/Checkout@v4
+        uses: actions/checkout@v4
 
       - name: build Docker image
         run: |
