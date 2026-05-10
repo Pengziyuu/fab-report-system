@@ -48,6 +48,7 @@ REQUEST_LATENCY = Histogram(
 
 # ===== 模擬即時數據更新 =====
 
+
 def simulate_fab_data():
     """每 5 秒更新一次模擬數據"""
     while True:
@@ -68,6 +69,7 @@ def simulate_fab_data():
         WIP_COUNT.labels(fab="Fab18").set(random.randint(500, 2000))
 
         time.sleep(5)
+
 
 # 背景執行模擬
 threading.Thread(target=simulate_fab_data, daemon=True).start()
