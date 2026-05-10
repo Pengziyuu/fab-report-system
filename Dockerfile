@@ -8,7 +8,7 @@ WORKDIR /app
 COPY app.py .
 
 # 安裝套件
-RUN pip install flask
+RUN pip install flask prometheus_client
 
 # 開放 Port
 EXPOSE 5000
