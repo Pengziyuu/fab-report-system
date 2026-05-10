@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install flask pytest
+          pip install flask prometheus_client pytest
 
       - name: Run tests
         run: |
